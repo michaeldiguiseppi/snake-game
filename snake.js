@@ -33,7 +33,7 @@ function Game() {
             drawSnake(self.snake);
             setTimeout(function() {
                 requestAnimationFrame(interval);
-            }, 60);
+            }, 240);
         };
     interval();
 };
@@ -42,7 +42,7 @@ function Game() {
 function drawSnake(snake) {
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
-    var pixelSize = canvas.width / 50;
+    var pixelSize = canvas.width / 25;
         for (var i = 0; i < snake.snakeArray.length; i++) {
             context.fillStyle = 'orange';
             context.fillRect(snake.snakeArray[i].x * pixelSize, snake.snakeArray[i].y * pixelSize, pixelSize, pixelSize);
