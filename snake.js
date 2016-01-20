@@ -15,10 +15,12 @@ window.addEventListener('keydown', function(key) {
 });
 
 
-function drawBorder(color) {
+function drawBorder(color, score) {
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
     context.clearRect(0,0, canvas.width, canvas.height);
+    context.font = "30px Arial";
+    context.fillText(score, 0, 30);
     context.strokeStyle = color;
     context.strokeRect(0,0, canvas.width, canvas.height);
 };
@@ -27,13 +29,18 @@ function drawBorder(color) {
 function Game() {
     var self = this;
         self.snake = new Snake();
+        self.food = createFood();
+        self.score = 0;
+        self.speed = 120;
         var interval = function() {
-            drawBorder('green');
+            drawBorder('green', self.score);
             updateSnake(self.snake);
             drawSnake(self.snake);
+            drawFood(self.food);
+            checkCollision(self.snake, self.food);
             setTimeout(function() {
                 requestAnimationFrame(interval);
-            }, 240);
+            }, self.speed);
         };
     interval();
 };
@@ -42,7 +49,7 @@ function Game() {
 function drawSnake(snake) {
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
-    var pixelSize = canvas.width / 25;
+    var pixelSize = canvas.width / 50;
         for (var i = 0; i < snake.snakeArray.length; i++) {
             context.fillStyle = 'orange';
             context.fillRect(snake.snakeArray[i].x * pixelSize, snake.snakeArray[i].y * pixelSize, pixelSize, pixelSize);
@@ -74,8 +81,65 @@ function updateSnake(snake) {
     tail.y = noseY;
     snake.snakeArray.unshift(tail);
 
-}
+};
 
+
+function createFood() {
+    var pixelSize = canvas.width / 50;
+    return food = {
+        x: Math.round(Math.random()*(canvas.width - pixelSize)/pixelSize),
+        y: Math.round(Math.random()*(canvas.height - pixelSize)/pixelSize)
+    };
+};
+
+function drawFood(food) {
+    var canvas = document.getElementById('canvas');
+    var context = canvas.getContext('2d');
+    var pixelSize = canvas.width / 50;
+        context.fillStyle = 'blue';
+        context.fillRect(food.x * pixelSize, food.y * pixelSize, pixelSize, pixelSize);
+        context.strokeStyle = 'white';
+        context.strokeRect(food.x * pixelSize, food.y * pixelSize, pixelSize, pixelSize);
+};
+
+function checkCollision(snake, food) {
+    var canvas = document.getElementById('canvas');
+    var pixelSize = canvas.width / 50;
+    // if we hit the food
+    if(snake.snakeArray[0].x === food.x && snake.snakeArray[0].y === food.y) {
+        game.food = createFood();
+        game.score++;
+        if(game.speed > 30) {
+            game.speed = game.speed - 15;
+        };
+        var tail = {};
+        tail.x = game.snake.snakeArray[0].x;
+        tail.y = game.snake.snakeArray[0].y;
+        snake.snakeArray.unshift(tail);
+    };
+    // off the map left
+    if(snake.snakeArray[0].x < 0) {
+        location.reload();
+    }
+    // off the map up
+    if(snake.snakeArray[0].y < 0){
+        location.reload();
+    }
+    // off the map down
+    if (snake.snakeArray[0].y + 1 > 600/pixelSize){
+        location.reload();
+    }
+    // off the map right
+    if (snake.snakeArray[0].x + 1 > 600/pixelSize){
+        location.reload();
+    }
+    // if we hit own snake body
+    for(var i = 2; i < snake.snakeArray.length; i++){
+      if(snake.snakeArray[i].x == snake.snakeArray[0].x && snake.snakeArray[i].y == snake.snakeArray[0].y){
+        location.reload();
+      };
+    };
+};
 
 
 
