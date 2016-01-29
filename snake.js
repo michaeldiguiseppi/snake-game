@@ -33,7 +33,7 @@ function Game() {
         self.score = 0;
         self.speed = 120;
         var interval = function() {
-            drawBorder('green', self.score);
+            drawBorder('black', self.score);
             updateSnake(self.snake);
             drawSnake(self.snake);
             drawFood(self.food);
@@ -51,7 +51,7 @@ function drawSnake(snake) {
     var context = canvas.getContext('2d');
     var pixelSize = canvas.width / 50;
         for (var i = 0; i < snake.snakeArray.length; i++) {
-            context.fillStyle = 'orange';
+            context.fillStyle = 'green';
             context.fillRect(snake.snakeArray[i].x * pixelSize, snake.snakeArray[i].y * pixelSize, pixelSize, pixelSize);
             context.strokeStyle = 'white';
             context.strokeRect(snake.snakeArray[i].x * pixelSize, snake.snakeArray[i].y * pixelSize, pixelSize, pixelSize);
@@ -96,7 +96,7 @@ function drawFood(food) {
     var canvas = document.getElementById('canvas');
     var context = canvas.getContext('2d');
     var pixelSize = canvas.width / 50;
-        context.fillStyle = 'blue';
+        context.fillStyle = 'brown';
         context.fillRect(food.x * pixelSize, food.y * pixelSize, pixelSize, pixelSize);
         context.strokeStyle = 'white';
         context.strokeRect(food.x * pixelSize, food.y * pixelSize, pixelSize, pixelSize);
